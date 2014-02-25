@@ -5,10 +5,10 @@ var request = require('request'),
     config = require('./config'),
     db = monk(config.dbURL + config.dbpath);
 
-var collection = db.get(config.dbcollection);
-
-var output = {};
-var input = process.argv[2].split(' ');
+var collection = db.get(config.dbcollection),
+    localCache = {},
+    output = {},
+    input = process.argv[2].split(' ');
 
 
 //oh god, I don't remember how this thing works
@@ -40,8 +40,6 @@ function splitWordList(word, data){
 };
 
 //this gets called for each word
-//contains a... series of async calls?
-//there's no fucking way that's right.
 //check local cache
 //if not, check db (remote cache)
 //if not, call api

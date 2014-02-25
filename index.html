@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>socket test</title>
+    <script src="http://localhost:80/socket.io/socket.io.js"></script>
+    <style type="text/css">
+      #messages {
+        height:200px;
+        width:500px;
+        border: 1px solid #000;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="messages"></div>
+    <input id="inp" type="text">
+    <button id="butt">SEND</button>
+    <script>
+      var socket = io.connect('http://localhost');
+
+      var msgs = document.getElementById('messages'),
+      inp = document.getElementById('inp'),
+      butten = document.getElementById('butt');
+
+      butten.addEventListener('click', function(ev){
+        socket.emit('messageSend', {message : inp.value});  
+        inp.value = "";
+      });
+      
+      socket.on('messageBroadcast', function(data){
+        msgs.innerHTML += data.message;
+      
+      });
+    
+    </script>
+  </body>
+</html>
