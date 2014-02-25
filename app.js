@@ -10,7 +10,9 @@ var collection = db.get(config.dbcollection);
 var output = {};
 var input = process.argv[2].split(' ');
 
-function splitWordList(word, data, callback){
+
+//oh god, I don't remember how this thing works
+function splitWordList(word, data){
   var wordList = [];
   if(data.response){
   data.response.forEach(function(respo){
@@ -24,37 +26,62 @@ function splitWordList(word, data, callback){
     wordList.push(word);
   }
   var rand = Math.random()*wordList.length|0;
-  console.log(wordList);
   var h = wordList[rand];
   if(h !== undefined){
     output[word] = h;
   }
-  callback();
-};
-
-function getWord(word, callback){
-  output[word] = word;
- collection.find({"term": "I"}, {}, function(e, docs){
-   if(e){
-    console.log("error " + e)
-   } else {
-    console.log(docs);  
-    db.close();
-   }
-  });
-  var url = "http://thesaurus.altervista.org/service.php?word="+word+"&language=en_US&output=json&key="+config.apiKey;
-
-  request(url, function(error, response, body){
-    if(!error && response.statusCode == 200){
-      splitWordList(word, JSON.parse(body), callback);
-      
-    } else {
-      console.log(error);
-      callback();
+  collection.insert({"term":word, "synonyms":wordList}, function(e, docs){
+    if(e){
+      console.log("error in insert " + e);
     }
   });
+   
+  
+};
+
+//this gets called for each word
+//contains a... series of async calls?
+//there's no fucking way that's right.
+//check local cache
+//if not, check db (remote cache)
+//if not, call api
+//  if we call api, write data to local + remote caches
+function getWord(word, callback){
+  output[word] = word;
+
+  collection.find({"term": word}, {}, 
+  function(e, docs){
+    if(e){
+      console.log("DB error " + e)
+    } else {
+      //we got a hit in the db
+      if(docs.length > 0){
+        output[word] = docs[0].synonyms[Math.random()*docs[0].synonyms.length|0];
+        callback();
+      } else {
+        //if docs came back empty, check api
+        console.log("checking API");
+        var url = "http://thesaurus.altervista.org/service.php?word="+word+"&language=en_US&output=json&key="+config.apiKey;
+        request(url, 
+        function(error, response, body){
+          if(!error && response.statusCode == 200){
+            //we got a hit in the api 
+            splitWordList(word, JSON.parse(body));
+            
+          } else {
+            console.log("API call error " + error);
+          }
+          //async callback;
+          callback();
+        });//end api callback 
+      }
+    }
+  });//end db callback
+      
 }
 
+//split the sentence on spaces
+//async process each word
 async.each(input, getWord, function(err){
   if(err){
     console.log("problem");
@@ -63,7 +90,8 @@ async.each(input, getWord, function(err){
     for(var x in output){
       b.push(output[x]);
     } 
-    console.log(b.join(' '));
+    console.log("output: " + b.join(' '));
   }
+  db.close();
 });
 
