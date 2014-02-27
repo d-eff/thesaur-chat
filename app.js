@@ -7,8 +7,8 @@ var request = require('request'),
 
 var collection = db.get(config.dbcollection),
     localCache = {},
-    output = {},
-    input = process.argv[2].split(' ');
+    output = {};
+    //input = process.argv[2].split(' ');
 
 
 //oh god, I don't remember how this thing works
@@ -46,7 +46,7 @@ function splitWordList(word, data){
 //  if we call api, write data to local + remote caches
 function getWord(word, callback){
   output[word] = word;
-
+  console.log("GETTING WORD");
   collection.find({"term": word}, {}, 
   function(e, docs){
     if(e){
@@ -78,6 +78,11 @@ function getWord(word, callback){
       
 }
 
+var xpo = {};
+
+xpo.fancify = function(input, coilbuk){
+  input = input.split(' ');
+  output = {};
 //split the sentence on spaces
 //async process each word
 async.each(input, getWord, function(err){
@@ -88,8 +93,10 @@ async.each(input, getWord, function(err){
     for(var x in output){
       b.push(output[x]);
     } 
-    console.log("output: " + b.join(' '));
+    coilbuk(b.join(' '));
   }
-  db.close();
 });
+};
 
+  db.close();
+module.exports = xpo;
