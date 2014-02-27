@@ -10,7 +10,7 @@ var collection = db.get(config.dbcollection),
     output = {};
     //input = process.argv[2].split(' ');
 
-
+//TODO: GET A NEW API
 //oh god, I don't remember how this thing works
 function splitWordList(word, data){
   var wordList = [];
@@ -39,6 +39,7 @@ function splitWordList(word, data){
   
 };
 
+//TODO: Add local cache
 //this gets called for each word
 //check local cache
 //if not, check db (remote cache)
@@ -80,6 +81,8 @@ function getWord(word, callback){
 
 var xpo = {};
 
+//TODO: remove (and add back) punctuation
+//TODO: tolowercase everything before sending it to getWord
 xpo.fancify = function(input, coilbuk){
   input = input.split(' ');
   output = {};

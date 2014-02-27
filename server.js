@@ -24,17 +24,14 @@ app.get('/', function(req, res){
 //TODO: ability to regen message translation
 //TODO: private messaging
 //TODO: rooms
-//TODO: server commands?
+//TODO: server commands? (/command, emotes)
 //TODO: ability to upvote specific words?
-//TODO: prevent empty messages
 //TODO: parse punctuation correctly
-//TODO: user list?
-//TODO: user colors?
+//TODO: dry it up
 io.sockets.on('connection', function(socket){
   //generate a new (temp?) nickname on first connect
   //something something bitwise OR only works up to 32-bit signed ints
   //whatever I like it and it's faster than typing Math.floor()
-  //TODO: nickname uniqueness
   var tempNick = names[Math.random()*names.length|0]  + (Math.random()*65535|0).toString();
 
   //check for nickname uniqueness, keep genning them as needed.
