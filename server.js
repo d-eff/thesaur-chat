@@ -5,17 +5,20 @@ var express = require('express'),
     io = require('socket.io').listen(server),
     fancy = require('./thesaurize');
 
-var names = ["John", "Mary", "William", "Dorothy", "Robert", "Helen", "James", "Margaret", "Charles", "Ruth", "George", "Mildred", "Joseph", "Virginia", "Edward", "Elizabeth", "Frank", "Frances", "Richard", "Anna"];
+var names = ["John", "Mary", "William", "Dorothy", "Robert", "Helen", "James", "Margaret", "Charles", "Ruth", "George", "Mildred", "Joseph", "Virginia", "Edward", "Elizabeth", "Frank", "Frances", "Richard", "Anna"],
+    users = [];
 
 
 server.listen(8080);
+
+app.use(express.static(__dirname + '/public'));
 
 app.get('/', function(req, res){
   res.sendfile('index.html');
 });
 
 
-//TODO: ability to review previous message
+//TODO: ability to review original message content
 //TODO: ability to regen message translation
 //TODO: private messaging
 //TODO: rooms
@@ -23,6 +26,8 @@ app.get('/', function(req, res){
 //TODO: ability to upvote specific words?
 //TODO: prevent empty messages
 //TODO: parse punctuation correctly
+//TODO: user list?
+//TODO: user colors?
 io.sockets.on('connection', function(socket){
   //generate a new (temp?) nickname on first connect
   //something something bitwise or only works up to 32-bit signed ints

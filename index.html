@@ -3,63 +3,27 @@
   <head>
     <title>Jabberwock</title>
     <script src="/socket.io/socket.io.js"></script>
-    <style type="text/css">
-      #messageDisplay {
-        height:200px;
-        width:500px;
-        border: 1px solid #000;
-      }
-    </style>
+    <link href="http://fonts.googleapis.com/css?family=Crimson+Text" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" type="text/css" href="css/style.css">
   </head>
   <body>
-    <div id="messageDisplay"></div>
-    <input id="messageInput" type="text">
-    <button id="messageSend">SEND</button>
+    <div class="contentWrap">
+    <h1 class="headline">thesaurus.</h1>
+      <div id="messageDisplay">test message</div>
 
-    <input id="nickInput" type="text">
-    <button id="nickChange">Change</button>
+      <div class="nick">
+        <h3>users.</h3>
+        <div class="userList"></div>
+        <input id="nickInput" type="text">
+        <button id="nickChange">Change</button>
+      </div>
+      <div class="send">
+        <input id="messageInput" type="text">
+        <button id="messageSend">SEND</button>
+      </div>
 
+    </div>
 
-    <script>
-      //connect to the server
-      //TODO: style
-      //TODO: prevent overflow
-      var socket = io.connect();
-
-      var msgDisplay = document.getElementById('messageDisplay'),
-      msgInput = document.getElementById('messageInput'),
-      sendButton = document.getElementById('messageSend'),
-      nickInput = document.getElementById('nickInput'),
-      nickChange = document.getElementById('nickChange');
-
-
-      //click the send button or press 'enter' to send a message
-      sendButton.addEventListener('click', sendMessage);
-      document.addEventListener('keydown', function(ev){
-        if(ev.keyCode === 13){
-          sendMessage();
-        }
-      });
-
-      //receive a broadcast
-      socket.on('messageBroadcast', function(data){
-        msgDisplay.innerHTML += data.nickname + ": " + data.message + '<br>';
-      });
-
-      nickChange.addEventListener('click', function(ev){
-        console.log("changing Nickname to " + nickInput.value);
-        socket.emit('set nickname', {newNick : nickInput.value});
-        nickInput.value = "";
-      });
-
-      //send a message, unless the field is empty
-      function sendMessage(){
-        if(msgInput.value !== ""){
-          socket.emit('messageSend', {message : msgInput.value});  
-          msgInput.value = "";
-        }
-      }
-    
-    </script>
+        <script src="chatFunc.js"></script>
   </body>
 </html>
