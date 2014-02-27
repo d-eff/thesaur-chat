@@ -21,11 +21,14 @@ document.addEventListener('keydown', function(ev){
 
 //receive a broadcast
 socket.on('messageBroadcast', function(data){
-  msgDisplay.innerHTML += data.nickname + ": " + data.message + '<br>';
+  msgDisplay.innerHTML += "<span style=\"color:" + data.color + "\">" + data.nickname + ":</span> " + data.message + '<br>';
 });
 
+//event listener for name change button
 nickChange.addEventListener('click', function(ev){
   console.log("changing Nickname to " + nickInput.value);
+  //make sure they've provided us with something
+  //TODO: prevent like, spaces and stuff
   if(nickInput.value !== ""){
     socket.emit('set nickname', {newNick : nickInput.value});
     nickInput.value = "";
@@ -39,3 +42,31 @@ function sendMessage(){
     msgInput.value = "";
   }
 }
+
+//update user list
+socket.on('update userlist', function(data){
+  var uList = document.getElementsByClassName('userList')[0],
+      oldList = uList.firstChild,
+      ul = document.createElement('ul');
+
+  for(var iter in data){
+    var li = document.createElement('li');
+    li.textContent = iter;
+    li.style.color = data[iter];
+    ul.appendChild(li);
+  }
+  
+  oldList.parentNode.removeChild(oldList);
+  uList.appendChild(ul);
+})
+
+//handle errors that we want the user to see
+socket.on('error', function(data){ 
+  msgDisplay.innerHTML += "<span style=\"color:red\">" + data.message + "</span><br>";
+})
+
+
+
+
+
+
