@@ -22,6 +22,8 @@
 
     <script>
       //connect to the server
+      //TODO: style
+      //TODO: prevent overflow
       var socket = io.connect();
 
       var msgDisplay = document.getElementById('messageDisplay'),
@@ -31,10 +33,12 @@
       nickChange = document.getElementById('nickChange');
 
 
-      //send a message
-      sendButton.addEventListener('click', function(ev){
-        socket.emit('messageSend', {message : msgInput.value});  
-        msgInput.value = "";
+      //click the send button or press 'enter' to send a message
+      sendButton.addEventListener('click', sendMessage);
+      document.addEventListener('keydown', function(ev){
+        if(ev.keyCode === 13){
+          sendMessage();
+        }
       });
 
       //receive a broadcast
@@ -47,8 +51,14 @@
         socket.emit('set nickname', {newNick : nickInput.value});
         nickInput.value = "";
       });
-      
 
+      //send a message, unless the field is empty
+      function sendMessage(){
+        if(msgInput.value !== ""){
+          socket.emit('messageSend', {message : msgInput.value});  
+          msgInput.value = "";
+        }
+      }
     
     </script>
   </body>

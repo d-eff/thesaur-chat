@@ -3,7 +3,7 @@ var express = require('express'),
     http = require('http'),
     server = http.createServer(app),
     io = require('socket.io').listen(server),
-    fancy = require('./app');
+    fancy = require('./thesaurize');
 
 var names = ["John", "Mary", "William", "Dorothy", "Robert", "Helen", "James", "Margaret", "Charles", "Ruth", "George", "Mildred", "Joseph", "Virginia", "Edward", "Elizabeth", "Frank", "Frances", "Richard", "Anna"];
 
@@ -21,6 +21,8 @@ app.get('/', function(req, res){
 //TODO: rooms
 //TODO: server commands?
 //TODO: ability to upvote specific words?
+//TODO: prevent empty messages
+//TODO: parse punctuation correctly
 io.sockets.on('connection', function(socket){
   //generate a new (temp?) nickname on first connect
   //something something bitwise or only works up to 32-bit signed ints
