@@ -1,18 +1,18 @@
 
 //connect to the server
 //TODO: style
-//TODO: autoscroll chat box
+//TODO: prevent illegal characters in usernames
 
 var socket = io.connect();
 var messages = [],
     messageIndex = 0;
+var autoscrollEnable = true;
 
 var msgDisplay = document.getElementById('messageDisplay'),
-msgInput = document.getElementById('messageInput'),
-sendButton = document.getElementById('messageSend'),
-nickInput = document.getElementById('nickInput'),
-nickChange = document.getElementById('nickChange');
-
+    msgInput = document.getElementById('messageInput'),
+    sendButton = document.getElementById('messageSend'),
+    nickInput = document.getElementById('nickInput'),
+    nickChange = document.getElementById('nickChange');
 
 //*******EVENT LISTENERS
 
@@ -36,12 +36,22 @@ document.addEventListener('keydown', function(ev){
 nickChange.addEventListener('click', function(ev){
   console.log("changing Nickname to " + nickInput.value);
   //make sure they've provided us with something
-  //TODO: prevent like, spaces and stuff
   if(nickInput.value !== ""){
     socket.emit('set nickname', {newNick : nickInput.value});
     nickInput.value = "";
   }
 });
+
+//is it cheaper/better to use a flag like this?
+//or should I just use document.activeElement === msgDisplay?
+//atm I'm only checking for this case
+msgDisplay.addEventListener('focus', function(ev){
+  autoscrollEnable = false;
+});
+msgDisplay.addEventListener('blur', function(ev){
+  autoscrollEnable = true;
+});
+
 
 //*********HELPER FUNCTIONS
 
@@ -67,7 +77,9 @@ function nextMessage(){
   if(messageIndex > 0){
     messageIndex--;
   }
-  msgInput.value = messages[messageIndex];
+  if(messages.length > 0){
+    msgInput.value = messages[messageIndex];
+  }
 }
 
 //push down to access messages in the other direction
@@ -87,7 +99,13 @@ function prevMessage(){
 
 //receive a broadcast
 socket.on('messageBroadcast', function(data){
-  msgDisplay.innerHTML += "<span style=\"color:" + data.color + "\">" + data.nickname + ":</span> " + data.message + '<br>';
+  msgDisplay.innerHTML += "<span style=\"color:" + data.color + "\">" + data.nickname + ":</span>&nbsp;" + data.message + '<br>' + "orig: " + data.original + '<br>';
+
+
+  if(autoscrollEnable){
+    msgDisplay.scrollTop = msgDisplay.scrollHeight;
+  }
+
 });
 
 //update user list

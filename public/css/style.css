@@ -45,7 +45,7 @@ table {
   border-collapse: collapse;
   border-spacing: 0;
 }
-/* End Resets */
+/*======================= End Resets============================ */
 
 *, *:before, *:after{
   box-sizing: border-box;
@@ -56,31 +56,80 @@ body {
   font-size:16px;
   background: url('../imgs/forest.jpg') no-repeat center center fixed;
 }
+strong {
+  font-weight:bold;
+}
 h1 {
   font-size:48px;
   font-size:3rem;
   font-weight:bold;
 }
+
 h3 {
   font-size:32px;
   font-size:2rem;
-  line-height:10px;
-  margin-bottom:15px;
   font-weight:bold;
 }
-
 
 .contentWrap {
   max-width:1024px;
   margin:0 auto;
+  position:relative;
 }
+
 .headline {
   background-color:#ffffff;
-  width:200px;
-  padding:0 5px;
+  width:700px;
+  padding:0 10px;
   opacity:0.8;
   border-radius: 2px 2px;
   margin:5px 0px;
+  position:relative;
+  z-index:2;
+}
+
+.headline h1 {
+  opacity:1;
+  display:inline-block;
+}
+
+div.settings {
+  float:right;
+}
+
+div.settings a {
+  text-decoration:none;
+  color:#777;
+  opacity:0.8;
+  padding:0px 10px;
+}
+
+.settingsBox {
+  background-color:#fff;
+  padding:10px;
+  position:absolute;
+  top:54px;
+  left:300px;
+  width:400px;
+  display:none;
+}
+.settingsBox h3 {
+  padding:8px 0px;
+}
+.settingsBox p {
+  padding: 0px 5px 10px 5px;
+}
+div.settings a:hover {
+  color:#282828;
+}
+div.settings a:hover + .settingsBox {
+  display:block;
+}
+.smHeadline {
+  background-color:#ffffff;
+  line-height:25px;
+  padding:0 0 3px 5px;
+  opacity:0.8; 
 }
 #messageDisplay {
   height:500px;
@@ -92,27 +141,47 @@ h3 {
   background-color:#ffffff;
   opacity:0.8;
   width:700px;
-  margin:0 20px 10px 0;
+  margin:0 15px 5px 0;
   border: 1px solid #777777;
+  border-radius: 2px 2px;
 }
 
 #messageInput {
   width:700px;
+  border-radius:2px 2px;
+  background-color:#ffffff;
+  opacity:0.8;
+  color:#111;
+  padding-left:10px;
+  border:none;
 }
-
 
 .nick {
   float:left;
   width:200px;
 }
-
 .userList {
   border: 1px solid #777;
   background-color:#fff;
   height:200px;
   width:200px;
+  opacity:0.8;
+  margin-top:5px;
+  padding:5px;
+  overflow-y: auto;
+  border-radius: 2px 2px;
+}
+.userList ul {
+  opacity:1;
 }
 
 #nickInput {
   width:130px;  
+  background-color:#ffffff;
+  opacity:0.8;
+  color:#111;
+  border:none;
+  border-radius: 1px 1px;
+  padding-left:5px;
 }
+

@@ -8,11 +8,28 @@
   </head>
   <body>
     <div class="contentWrap">
-    <h1 class="headline">thesaurus.</h1>
-      <div id="messageDisplay">test message</div>
+      <div class="headline">
+        <h1>thesaurus.</h1>
+        <div class="settings">
+          <a href="#"><h1>?</h1></a>
+          <div class="settingsBox">
+            <h3>What?</h3>
+            <p>We're forcibly stepping everyone's diction game up. Get on our level.</p>
+            <h3>Huh?</h3>
+            <p>This monosyllabic thing you've got going on - we like it. This chat room passes all your messages through the thesaurus api from thesaurus.altervista.org. Hilarity (hopefully) ensues.</p>
+            <h3>Who?</h3>
+            <p>Another glorious and terrifying <strong>Fictional Corp</strong> product.</p>
+          </div>
+        </div>
+        <div class="settings">
+          <a href="#"><h1>!</h1></a>
+          <div class="settingsBox">Settings go here</div>
+        </div>
+      </div>
+      <div id="messageDisplay" tabindex="0"></div>
 
       <div class="nick">
-        <h3>users.</h3>
+        <h3 class="smHeadline">users.</h3>
         <div class="userList"><ul></ul></div>
         <input id="nickInput" type="text" value="Change handle">
         <button id="nickChange">Change</button>

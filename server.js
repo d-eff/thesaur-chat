@@ -54,7 +54,7 @@ io.sockets.on('connection', function(socket){
 
     //announce
     var msg = tempNick + " has joined."; 
-    io.sockets.emit('messageBroadcast', {message : msg, nickname : serverHandle, color : serverColor});
+    io.sockets.emit('messageBroadcast', {message : msg, nickname : serverHandle, color : serverColor, original : msg});
   });
   
 
@@ -74,7 +74,11 @@ io.sockets.on('connection', function(socket){
 
         socket.set('nickname', data.newNick, function(){
           var msg = nick + " changed name to " + data.newNick;
-          io.sockets.emit('messageBroadcast', {message : msg, nickname : serverHandle, color : serverColor});
+
+          //broadcast change
+          io.sockets.emit('messageBroadcast', {message : msg, nickname : serverHandle, color : serverColor, original : msg});
+
+          //update userList on user end
           io.sockets.emit('update userlist', users);
         });
       } else {
@@ -92,7 +96,7 @@ io.sockets.on('connection', function(socket){
       //get their color
       socket.get('color', function(err, color){
         //send the message to err'one
-        io.sockets.emit('messageBroadcast', {message : msg, nickname : nick, color : color});
+        io.sockets.emit('messageBroadcast', {message : msg, nickname : nick, color : color, original : data.message});
       })
     })
     
@@ -105,7 +109,7 @@ io.sockets.on('connection', function(socket){
       var msg = nick + " has left the room.";
       //take their nickname out of the user list
       delete users[nick];
-      io.sockets.emit('messageBroadcast', {message : msg, nickname : serverHandle, color : serverColor});
+      io.sockets.emit('messageBroadcast', {message : msg, nickname : serverHandle, color : serverColor, original : msg});
       io.sockets.emit('update userlist', users);
     });
   })
