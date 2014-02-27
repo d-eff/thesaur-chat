@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>socket test</title>
-    <script src="http://localhost:8080/socket.io/socket.io.js"></script>
+    <title>Jabberwock</title>
+    <script src="/socket.io/socket.io.js"></script>
     <style type="text/css">
-      #messages {
+      #messageDisplay {
         height:200px;
         width:500px;
         border: 1px solid #000;
@@ -12,29 +12,43 @@
     </style>
   </head>
   <body>
-    <div id="messages"></div>
-    <input id="inp" type="text">
-    <button id="butt">SEND</button>
+    <div id="messageDisplay"></div>
+    <input id="messageInput" type="text">
+    <button id="messageSend">SEND</button>
 
-
+    <input id="nickInput" type="text">
+    <button id="nickChange">Change</button>
 
 
     <script>
-      var socket = io.connect('http://localhost');
+      //connect to the server
+      var socket = io.connect();
 
-      var msgs = document.getElementById('messages'),
-      inp = document.getElementById('inp'),
-      butten = document.getElementById('butt');
+      var msgDisplay = document.getElementById('messageDisplay'),
+      msgInput = document.getElementById('messageInput'),
+      sendButton = document.getElementById('messageSend'),
+      nickInput = document.getElementById('nickInput'),
+      nickChange = document.getElementById('nickChange');
 
-      butten.addEventListener('click', function(ev){
-        socket.emit('messageSend', {message : inp.value});  
-        inp.value = "";
+
+      //send a message
+      sendButton.addEventListener('click', function(ev){
+        socket.emit('messageSend', {message : msgInput.value});  
+        msgInput.value = "";
       });
-      
+
+      //receive a broadcast
       socket.on('messageBroadcast', function(data){
-        msgs.innerHTML += data.message + '<br>';
-      
+        msgDisplay.innerHTML += data.nickname + ": " + data.message + '<br>';
       });
+
+      nickChange.addEventListener('click', function(ev){
+        console.log("changing Nickname to " + nickInput.value);
+        socket.emit('set nickname', {newNick : nickInput.value});
+        nickInput.value = "";
+      });
+      
+
     
     </script>
   </body>
