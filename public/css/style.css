@@ -145,7 +145,22 @@ div.settings a:hover + .settingsBox {
   border: 1px solid #777777;
   border-radius: 2px 2px;
 }
-
+.dispMessage {
+}
+.original {
+  margin-top:-18px;
+  background:yellow;
+  opacity:1;
+  position:relative;
+  z-index:2;
+  display:none;
+}
+.dispMessage:hover + .original{
+  display:block;
+}
+.original:hover {
+  display:block;
+}
 #messageInput {
   width:700px;
   border-radius:2px 2px;
@@ -185,3 +200,6 @@ div.settings a:hover + .settingsBox {
   padding-left:5px;
 }
 
+.grey {
+  color:#777 !important;
+}

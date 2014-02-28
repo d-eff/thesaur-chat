@@ -9,6 +9,7 @@ var messages = [],
 var autoscrollEnable = true;
 
 var msgDisplay = document.getElementById('messageDisplay'),
+    msgList = document.getElementById('messageList'),
     msgInput = document.getElementById('messageInput'),
     sendButton = document.getElementById('messageSend'),
     nickInput = document.getElementById('nickInput'),
@@ -52,7 +53,23 @@ msgDisplay.addEventListener('blur', function(ev){
   autoscrollEnable = true;
 });
 
+nickInput.addEventListener('focus', function(ev){
+  nickInput.value = '';
+  nickInput.classList.toggle('grey');
+});
+nickInput.addEventListener('blur', function(ev){
+  nickInput.value = "change your handle"
+  nickInput.classList.toggle('grey');
+});
 
+msgInput.addEventListener('focus', function(ev){
+  msgInput.value = '';
+  msgInput.classList.toggle('grey');
+});
+msgInput.addEventListener('blur', function(ev){
+  msgInput.value = "change your handle"
+  msgInput.classList.toggle('grey');
+});
 //*********HELPER FUNCTIONS
 
 //send a message, unless the field is empty
@@ -99,13 +116,22 @@ function prevMessage(){
 
 //receive a broadcast
 socket.on('messageBroadcast', function(data){
-  msgDisplay.innerHTML += "<span style=\"color:" + data.color + "\">" + data.nickname + ":</span>&nbsp;" + data.message + '<br>' + "orig: " + data.original + '<br>';
+  var display = document.createElement('li'),
+      original = document.createElement('li');
 
+  display.classList.add('dispMessage');
+  original.classList.add('original');
 
+  display.innerHTML += "<span style=\"color:" + data.color + "\">" + data.nickname + ":</span>&nbsp;" + data.message;
+  original.innerHTML += "<span style=\"color:" + data.color + "\">" + data.nickname + ":</span>&nbsp;" + data.original;
+  
+  msgList.appendChild(display);
+  msgList.appendChild(original);
+
+  //autoscroll the chat box to the bottom
   if(autoscrollEnable){
     msgDisplay.scrollTop = msgDisplay.scrollHeight;
   }
-
 });
 
 //update user list
