@@ -79,9 +79,9 @@ h3 {
 
 .headline {
   background-color:#ffffff;
+  background: rgba(255,255,255,0.8);
   width:700px;
   padding:0 10px;
-  opacity:0.8;
   border-radius: 2px 2px;
   margin:5px 0px;
   position:relative;
@@ -89,7 +89,6 @@ h3 {
 }
 
 .headline h1 {
-  opacity:1;
   display:inline-block;
 }
 
@@ -127,9 +126,9 @@ div.settings a:hover + .settingsBox {
 }
 .smHeadline {
   background-color:#ffffff;
+  background: rgba(255,255,255,0.8);
   line-height:25px;
   padding:0 0 3px 5px;
-  opacity:0.8; 
 }
 #messageDisplay {
   height:500px;
@@ -139,7 +138,7 @@ div.settings a:hover + .settingsBox {
   float:left;
   overflow-y:scroll;
   background-color:#ffffff;
-  opacity:0.8;
+  background: rgba(255,255,255,0.8);
   width:700px;
   margin:0 15px 5px 0;
   border: 1px solid #777777;
@@ -150,7 +149,6 @@ div.settings a:hover + .settingsBox {
 .original {
   margin-top:-18px;
   background:yellow;
-  opacity:1;
   position:relative;
   z-index:2;
   display:none;
@@ -165,7 +163,7 @@ div.settings a:hover + .settingsBox {
   width:700px;
   border-radius:2px 2px;
   background-color:#ffffff;
-  opacity:0.8;
+  background: rgba(255,255,255,0.8);
   color:#111;
   padding-left:10px;
   border:none;
@@ -178,22 +176,19 @@ div.settings a:hover + .settingsBox {
 .userList {
   border: 1px solid #777;
   background-color:#fff;
+  background: rgba(255,255,255,0.8);
   height:200px;
   width:200px;
-  opacity:0.8;
   margin-top:5px;
   padding:5px;
   overflow-y: auto;
   border-radius: 2px 2px;
 }
-.userList ul {
-  opacity:1;
-}
 
 #nickInput {
   width:130px;  
   background-color:#ffffff;
-  opacity:0.8;
+  background: rgba(255,255,255,0.8);
   color:#111;
   border:none;
   border-radius: 1px 1px;

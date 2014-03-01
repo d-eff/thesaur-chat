@@ -35,14 +35,12 @@ document.addEventListener('keydown', function(ev){
 
 //event listener for name change button
 nickChange.addEventListener('click', function(ev){
-  console.log("changing Nickname to " + nickInput.value);
   //make sure they've provided us with something
   if(nickInput.value !== ""){
     socket.emit('set nickname', {newNick : nickInput.value});
     nickInput.value = "";
   }
 });
-
 //is it cheaper/better to use a flag like this?
 //or should I just use document.activeElement === msgDisplay?
 //atm I'm only checking for this case
@@ -53,23 +51,28 @@ msgDisplay.addEventListener('blur', function(ev){
   autoscrollEnable = true;
 });
 
+//hide the default value on the input boxes
 nickInput.addEventListener('focus', function(ev){
   nickInput.value = '';
   nickInput.classList.toggle('grey');
 });
 nickInput.addEventListener('blur', function(ev){
-  nickInput.value = "change your handle"
+  //so... when you click the 'change' button, focus occurs on the button
+  //before click does. so blur fires here, and then it tries to set the nickname
+  //there's got to be a better way to handle this.
+  setTimeout(function(){nickInput.value = "change your handle"}, 100);
   nickInput.classList.toggle('grey');
 });
-
 msgInput.addEventListener('focus', function(ev){
   msgInput.value = '';
   msgInput.classList.toggle('grey');
 });
 msgInput.addEventListener('blur', function(ev){
-  msgInput.value = "change your handle"
+  setTimeout(function(){msgInput.value = "press enter to send."}, 100);
   msgInput.classList.toggle('grey');
 });
+
+
 //*********HELPER FUNCTIONS
 
 //send a message, unless the field is empty
@@ -122,8 +125,8 @@ socket.on('messageBroadcast', function(data){
   display.classList.add('dispMessage');
   original.classList.add('original');
 
-  display.innerHTML += "<span style=\"color:" + data.color + "\">" + data.nickname + ":</span>&nbsp;" + data.message;
-  original.innerHTML += "<span style=\"color:" + data.color + "\">" + data.nickname + ":</span>&nbsp;" + data.original;
+  display.innerHTML = "<span style=\"color:" + data.color + "\">" + data.nickname + ":</span>&nbsp;" + data.message;
+  original.innerHTML = "<span style=\"color:" + data.color + "\">" + data.nickname + ":</span>&nbsp;" + data.original;
   
   msgList.appendChild(display);
   msgList.appendChild(original);
@@ -155,7 +158,10 @@ socket.on('update userlist', function(data){
 
 //handle errors that we want announced to the user
 socket.on('error', function(data){ 
-  msgDisplay.innerHTML += "<span style=\"color:red\">" + data.message + "</span><br>";
+  var err = document.createElement('li');
+  er.innerHTML = "<span style=\"color:red\">" + data.message + "</span><br>";
+
+  msgList.appendChild(err)
 })
 
 
