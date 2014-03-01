@@ -70,7 +70,11 @@ h3 {
   font-size:2rem;
   font-weight:bold;
 }
-
+h4 {
+  font-size:24px;
+  font-size:1.5rem;
+  font-weight:bold;
+}
 .contentWrap {
   max-width:1024px;
   margin:0 auto;
