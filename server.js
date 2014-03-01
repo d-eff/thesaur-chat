@@ -20,8 +20,7 @@ app.get('/', function(req, res){
 });
 
 
-//TODO: ability to review original message content
-//TODO: ability to regen message translation
+//TODO: ability to regen message translation/ehhhh
 //TODO: private messaging
 //TODO: rooms
 //TODO: server commands? (/command, emotes)
@@ -89,18 +88,32 @@ io.sockets.on('connection', function(socket){
 
   //we got a message!
   socket.on('messageSend', function(data){
-    //translate message
-    fancy.fancify(data.message, function(msg){ 
-    //get their  nickname
-    socket.get('nickname', function(err, nick){
-      //get their color
-      socket.get('color', function(err, color){
-        //send the message to err'one
-        io.sockets.emit('messageBroadcast', {message : msg, nickname : nick, color : color, original : data.message});
+    //first word start with slash? we've got a server command
+    if(data.message.match(/^\//)){ 
+      var cmd = data.message.split(' ')[0],
+          cmdLength = cmd.length;
+          msg = data.substr(cmdLength+1, msg.length);
+      if(cmd === '/em' || cmd === '/me'){
+        socket.get('nickname', function(err, nick){
+          socket.get('color', function(err, color){
+            io.sockets.emit('emote', {message : msg, nickname : nick, color: color});
+          })
+        })
+      }
+    } else {
+      //translate message
+      fancy.fancify(data.message, function(msg){ 
+      //get their  nickname
+      socket.get('nickname', function(err, nick){
+        //get their color
+        socket.get('color', function(err, color){
+          //send the message to err'one
+          io.sockets.emit('messageBroadcast', {message : msg, nickname : nick, color : color, original : data.message});
+        })
       })
-    })
-    
-    });
+      
+      });
+    }
   });
 
   //announce disconnects

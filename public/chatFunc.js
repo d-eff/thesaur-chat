@@ -128,6 +128,8 @@ socket.on('messageBroadcast', function(data){
   display.innerHTML = "<span style=\"color:" + data.color + "\">" + data.nickname + ":</span>&nbsp;" + data.message;
   original.innerHTML = "<span style=\"color:" + data.color + "\">" + data.nickname + ":</span>&nbsp;" + data.original;
   
+  for(var x = 0; )
+
   msgList.appendChild(display);
   msgList.appendChild(original);
 
@@ -159,12 +161,16 @@ socket.on('update userlist', function(data){
 //handle errors that we want announced to the user
 socket.on('error', function(data){ 
   var err = document.createElement('li');
-  er.innerHTML = "<span style=\"color:red\">" + data.message + "</span><br>";
+  er.innerHTML = "<span style=\"color:red\">" + data.message + "</span>";
 
   msgList.appendChild(err)
 })
 
-
+socket.on('emote', function(data){
+  var em = document.createElement('li');
+  em.innerHTML = "<span style=\"color:" + data.color + "\">" data.nick + " " + data.message + "</span>";
+  msgList.appendChild(em);
+})
 
 
 
