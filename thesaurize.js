@@ -6,9 +6,7 @@ var request = require('request'),
     db = monk(config.dbURL + config.dbpath);
 
 var collection = db.get(config.dbcollection),
-    localCache = {},
     output = {};
-    //input = process.argv[2].split(' ');
 
 //TODO: GET A NEW API
 function splitWordList(word, data){

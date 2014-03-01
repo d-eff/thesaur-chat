@@ -92,7 +92,7 @@ io.sockets.on('connection', function(socket){
     if(data.message.match(/^\//)){ 
       var cmd = data.message.split(' ')[0],
           cmdLength = cmd.length;
-          msg = data.substr(cmdLength+1, msg.length);
+          msg = data.message.substr(cmdLength+1, data.message.length);
       if(cmd === '/em' || cmd === '/me'){
         socket.get('nickname', function(err, nick){
           socket.get('color', function(err, color){
