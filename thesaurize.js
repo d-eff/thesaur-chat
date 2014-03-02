@@ -6,7 +6,8 @@ var request = require('request'),
     db = monk(config.dbURL + config.dbpath);
 
 var collection = db.get(config.dbcollection),
-    output = {};
+    output = {},
+    counter = 0;
 
 //TODO: GET A NEW API
 function splitWordList(word, data){
@@ -35,8 +36,9 @@ function splitWordList(word, data){
 
   //again, just in case
   if(h !== undefined){
-    output[word] = h;
+    return h;
   }
+
 
   //if we had to fetch from the api, push the new term to the db
   collection.insert({"term":word, "synonyms":wordList}, function(e, docs){
@@ -53,10 +55,7 @@ function splitWordList(word, data){
 //if not, call api
 //  if we call api, write data to local + remote caches
 function getWord(word, callback){
-  //sets the word as a property of the output obj
-  //initially output was an array, but the callbacks don't
-  //always fire in order - making it an obj allows us to preserve that
-  output[word] = word;
+  var result;
 
   //check the db
   collection.find({"term": word}, {}, 
@@ -67,8 +66,8 @@ function getWord(word, callback){
       //we got a hit in the db
       if(docs.length > 0){
         //get a random synonym
-        output[word] = docs[0].synonyms[Math.random()*docs[0].synonyms.length|0];
-        callback();
+        result = docs[0].synonyms[Math.random()*docs[0].synonyms.length|0];
+        callback(null, result);
       } else {
         //if we didn't find it in the db, check api
         var url = "http://thesaurus.altervista.org/service.php?word="+word+"&language=en_US&output=json&key="+config.apiKey;
@@ -76,42 +75,37 @@ function getWord(word, callback){
           if(!error && response.statusCode == 200){
             //we got a hit in the api 
             //we need to parse the api response
-            splitWordList(word, JSON.parse(body));
-            
+            result = splitWordList(word, JSON.parse(body));
+            callback(null, result);
           } else {
             //nothing found, so we'll just use the word itself
             console.log("API call error " + error);
+            result = word;
+            callback(null, result);
           }
-          //async callback;
-          callback();
         });//end api callback 
       }
     }
   });//end db callback
-      
 }
 
 var xpo = {};
 
 //TODO: remove (and add back) punctuation
 //TODO: tolowercase everything before sending it to getWord
-xpo.fancify = function(input, coilbuk){
+xpo.fancify = function(input, callback){
   input = input.split(' ');
-  output = {};
-//split the sentence on spaces
-//async process each word
-async.each(input, getWord, function(err){
-  if(err){
-    console.log("problem");
-  } else {
-    //we've got all the words, put them back together
-    var b = [];
-    for(var x in output){
-      b.push(output[x]);
-    } 
-    coilbuk(b.join(' '));
-  }
-});
+
+  //split the sentence on spaces
+  //async process each word
+  async.map(input, getWord, function(err, results){
+    if(err){
+      console.log("problem");
+    } else {
+      //we've got all the words, put them back together
+      callback(results.join(' '));
+    }
+  });
 };
 
 db.close();
