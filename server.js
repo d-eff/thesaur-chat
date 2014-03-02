@@ -19,11 +19,9 @@ app.get('/', function(req, res){
   res.sendfile('index.html');
 });
 
-
-//TODO: ability to regen message translation/ehhhh
 //TODO: private messaging
 //TODO: rooms
-//TODO: server commands? (/command, emotes)
+//TODO: server commands
 //TODO: ability to upvote specific words?
 //TODO: parse punctuation correctly
 //TODO: dry it up
@@ -53,7 +51,7 @@ io.sockets.on('connection', function(socket){
 
     //announce
     var msg = tempNick + " has joined."; 
-    io.sockets.emit('messageBroadcast', {message : msg, nickname : serverHandle, color : serverColor, original : msg});
+    io.sockets.emit('chat message', {message : msg, nickname : serverHandle, color : serverColor});
   });
   
 
@@ -75,13 +73,13 @@ io.sockets.on('connection', function(socket){
           var msg = nick + " changed name to " + data.newNick;
 
           //broadcast change
-          io.sockets.emit('messageBroadcast', {message : msg, nickname : serverHandle, color : serverColor, original : msg});
+          io.sockets.emit('chat message', {message : msg, nickname : serverHandle, color : serverColor});
 
           //update userList on user end
           io.sockets.emit('update userlist', users);
         });
       } else {
-        socket.emit('error', { message : "Sorry, that name is taken." });
+        socket.emit('chat message', { message : "Sorry, that name is taken.", nickname: serverHandle, color: "red" });
       }
     });
   });
@@ -108,7 +106,7 @@ io.sockets.on('connection', function(socket){
         //get their color
         socket.get('color', function(err, color){
           //send the message to err'one
-          io.sockets.emit('messageBroadcast', {message : msg, nickname : nick, color : color, original : data.message});
+          io.sockets.emit('chat message', {message : msg, nickname : nick, color : color, original : data.message});
         })
       })
       
@@ -122,7 +120,7 @@ io.sockets.on('connection', function(socket){
       var msg = nick + " has left the room.";
       //take their nickname out of the user list
       delete users[nick];
-      io.sockets.emit('messageBroadcast', {message : msg, nickname : serverHandle, color : serverColor, original : msg});
+      io.sockets.emit('chat message', {message : msg, nickname : serverHandle, color : serverColor});
       io.sockets.emit('update userlist', users);
     });
   })

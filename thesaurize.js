@@ -33,19 +33,37 @@ function splitWordList(word, data){
   }
   var rand = Math.random()*wordList.length|0;
   var h = wordList[rand];
+  
+  //if we had to fetch from the api, push the new term to the db
+  //create the obj for the new word
+  var newDBEntry = {
+    term: word,
+    synonyms:[]
+  }
 
+  //push each term in wordlist to the newDBEntry, with a default weight of 1
+  for(var x = 0; x < wordList.length; ++x){
+    var entryWord = {
+      syn: wordList[x],
+      weight: 1
+    }
+    newDBEntry.synonyms.push(entryWord);
+  }
+  
   //again, just in case
   if(h !== undefined){
+    //push our new word to the DB so we don't have to hit the API for it again
+    collection.insert(newDBEntry, function(e, docs){
+      if(e){
+        console.log("error in insert " + e);
+      }
+    });
+
+    //return the word
     return h;
   }
 
 
-  //if we had to fetch from the api, push the new term to the db
-  collection.insert({"term":word, "synonyms":wordList}, function(e, docs){
-    if(e){
-      console.log("error in insert " + e);
-    }
-  });
 };
 
 //TODO: Add local cache
@@ -65,8 +83,18 @@ function getWord(word, callback){
     } else {
       //we got a hit in the db
       if(docs.length > 0){
-        //get a random synonym
-        result = docs[0].synonyms[Math.random()*docs[0].synonyms.length|0];
+        //make an array to hold the weighted synonyms
+        var weightedSyns = [],
+            syns = docs[0].synonyms;
+        
+        //push each synonym to weightedArray once for each increment of weight
+        for(var itr in syns){
+          for(var ctr = 0; ctr < syns[itr].weight; ++ctr){
+            weightedSyns.push(syns[itr].syn);
+          }  
+        }
+        //return a (weighted) random synonym
+        result = weightedSyns[Math.random()*weightedSyns.length|0];
         callback(null, result);
       } else {
         //if we didn't find it in the db, check api

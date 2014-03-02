@@ -1,7 +1,10 @@
 
+
 //connect to the server
 //TODO: style
 //TODO: prevent illegal characters in usernames
+//TODO: firing nextMessage or prevMessage without focus on the input
+//      keeps the grey class
 
 var socket = io.connect();
 var messages = [],
@@ -22,7 +25,11 @@ sendButton.addEventListener('click', sendMessage);
 document.addEventListener('keydown', function(ev){
   //enter
   if(ev.keyCode === 13){
-    sendMessage();
+    if(document.activeElement === nickInput){
+      changeNick()
+    } else {
+      sendMessage();
+    }
   }
   //up
   if(ev.keyCode === 38){
@@ -35,12 +42,9 @@ document.addEventListener('keydown', function(ev){
 
 //event listener for name change button
 nickChange.addEventListener('click', function(ev){
-  //make sure they've provided us with something
-  if(nickInput.value !== ""){
-    socket.emit('set nickname', {newNick : nickInput.value});
-    nickInput.value = "";
-  }
+  changeNick();  
 });
+
 //is it cheaper/better to use a flag like this?
 //or should I just use document.activeElement === msgDisplay?
 //atm I'm only checking for this case
@@ -91,6 +95,14 @@ function sendMessage(){
   }
 }
 
+function changeNick(){
+  //make sure they've provided us with something
+  if(nickInput.value !== ""){
+    socket.emit('set nickname', {newNick : nickInput.value});
+    nickInput.value = "";
+  }
+}
+
 //pressing up accesses last message
 //messages are stored in the messages array 
 function nextMessage(){
@@ -117,20 +129,20 @@ function prevMessage(){
 
 //******SOCKET EVENTS************
 
-//receive a broadcast
-socket.on('messageBroadcast', function(data){
-  var display = document.createElement('li'),
-      original = document.createElement('li');
+//receive a message
+socket.on('chat message', function(data){
 
+  var display = document.createElement('li');
   display.classList.add('dispMessage');
-  original.classList.add('original');
-
   display.innerHTML = "<span style=\"color:" + data.color + "\">" + data.nickname + ":</span>&nbsp;" + data.message;
-  original.innerHTML = "<span style=\"color:" + data.color + "\">" + data.nickname + ":</span>&nbsp;" + data.original; 
-
   msgList.appendChild(display);
-  msgList.appendChild(original);
-
+  
+  if(data.original){ 
+    original = document.createElement('li');
+    original.classList.add('original');
+    original.innerHTML = "<span style=\"color:" + data.color + "\">" + data.nickname + ":</span>&nbsp;" + data.original; 
+    msgList.appendChild(original);
+  }
   //autoscroll the chat box to the bottom
   if(autoscrollEnable){
     msgDisplay.scrollTop = msgDisplay.scrollHeight;
