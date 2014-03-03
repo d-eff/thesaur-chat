@@ -90,7 +90,7 @@ function sendMessage(){
 function receiveMessage(data){
   var display = document.createElement('li');
   display.classList.add('dispMessage');
-  display.innerHTML = "<span style=\"color:" + data.color + "\">" + data.nickname + ":</span>&nbsp;" + data.message;
+  display.innerHTML = "<span class=\"name\" style=\"color:" + data.color + "\">" + data.nickname + ":</span>&nbsp;" + data.message;
   msgList.appendChild(display);
   
   if(data.original){ 

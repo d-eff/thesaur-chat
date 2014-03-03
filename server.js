@@ -91,6 +91,24 @@ io.sockets.on('connection', function(socket){
             io.sockets.emit('emote', {message : msg, nickname : nick, color: color});
           })
         })
+      } else if (cmd === '/roll'){
+        socket.get('nickname', function(err, nick){
+          socket.get('color', function(err, color){ 
+
+            var numOfDice = msg.split('d')[0],
+                sides = msg.split('d')[1],
+                total = 0,
+                diceMsg = " rolls " + numOfDice + "d" + sides + ". Results: ";
+
+            for(var x = 0; x < numOfDice; ++x){
+              var result = (Math.random()*sides|0)+1;
+              total += result;
+              diceMsg += result.toString() + " ";
+            }
+            diceMsg += "Total: " + total.toString();
+            io.sockets.emit('emote', {message: diceMsg, nickname: nick, color:color});
+          })
+        })    
       }
     } else {
       //translate message
