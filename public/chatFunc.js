@@ -1,11 +1,3 @@
-
-
-//connect to the server
-//TODO: style
-//TODO: prevent illegal characters in usernames
-//TODO: firing nextMessage or prevMessage without focus on the input
-//      keeps the grey class
-
 var socket = io.connect();
 var messages = [],
     messageIndex = 0;
@@ -95,6 +87,36 @@ function sendMessage(){
   }
 }
 
+function receiveMessage(data){
+  var display = document.createElement('li');
+  display.classList.add('dispMessage');
+  display.innerHTML = "<span style=\"color:" + data.color + "\">" + data.nickname + ":</span>&nbsp;" + data.message;
+  msgList.appendChild(display);
+  
+  if(data.original){ 
+    original = document.createElement('li');
+    original.classList.add('original');
+    original.innerHTML = "<span style=\"color:" + data.color + "\">" + data.nickname + ":</span>&nbsp;";
+    var dterms = data.message.split(' ');
+    var oterms = data.original.split(' ');
+    for(var x = 0; x < oterms.length; ++x){
+      var l = "<a href=\"#\" class=\"word\" data-orig=\"" + dterms[x]  + "\">" + oterms[x] + "</a>&nbsp;"
+      original.innerHTML += l;
+    }
+    data.original; 
+    msgList.appendChild(original);
+    original.addEventListener('click', function(e){
+      var voteBox = document.getElementsByClassName('voteBox')[0];
+      voteBox.innerHTML = "<h3>" + e.target.dataset.orig + "</h3>" + "<p>" + e.target.innerHTML + "</p><p>UPVOTE</p><p>DOWNVOTE</p>";
+      console.log(e.target + " node: " + e.target.innerHTML + " dat: " + e.target.dataset.orig); 
+    });
+  }
+  //autoscroll the chat box to the bottom
+  if(autoscrollEnable){
+    msgDisplay.scrollTop = msgDisplay.scrollHeight;
+  }
+}
+
 function changeNick(){
   //make sure they've provided us with something
   if(nickInput.value !== ""){
@@ -130,24 +152,7 @@ function prevMessage(){
 //******SOCKET EVENTS************
 
 //receive a message
-socket.on('chat message', function(data){
-
-  var display = document.createElement('li');
-  display.classList.add('dispMessage');
-  display.innerHTML = "<span style=\"color:" + data.color + "\">" + data.nickname + ":</span>&nbsp;" + data.message;
-  msgList.appendChild(display);
-  
-  if(data.original){ 
-    original = document.createElement('li');
-    original.classList.add('original');
-    original.innerHTML = "<span style=\"color:" + data.color + "\">" + data.nickname + ":</span>&nbsp;" + data.original; 
-    msgList.appendChild(original);
-  }
-  //autoscroll the chat box to the bottom
-  if(autoscrollEnable){
-    msgDisplay.scrollTop = msgDisplay.scrollHeight;
-  }
-});
+socket.on('chat message', receiveMessage);
 
 //update user list
 socket.on('update userlist', function(data){

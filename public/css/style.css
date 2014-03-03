@@ -173,7 +173,7 @@ div.settings a:hover + .settingsBox {
   border:none;
 }
 
-.nick {
+.rcol {
   float:left;
   width:200px;
 }
@@ -197,6 +197,16 @@ div.settings a:hover + .settingsBox {
   border:none;
   border-radius: 1px 1px;
   padding-left:5px;
+}
+.voteBox {
+  width:200px;
+  height:260px;
+  background-color:#fff;
+  background: rgba(255,255,255,0.8);
+  border:1px solid #777;
+  margin-top:5px;
+  padding:5px;
+  border-radius:2px 2px;
 }
 
 .grey {

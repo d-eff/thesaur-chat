@@ -19,12 +19,6 @@ app.get('/', function(req, res){
   res.sendfile('index.html');
 });
 
-//TODO: private messaging
-//TODO: rooms
-//TODO: server commands
-//TODO: ability to upvote specific words?
-//TODO: parse punctuation correctly
-//TODO: dry it up
 io.sockets.on('connection', function(socket){
   //generate a new (temp?) nickname on first connect
   //something something bitwise OR only works up to 32-bit signed ints
