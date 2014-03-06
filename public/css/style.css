@@ -76,6 +76,11 @@ h4 {
   font-size:1.5rem;
   font-weight:bold;
 }
+h5 {
+  font-size:20px;
+  font-size:1.25rem;
+  font-weight:bold;
+}
 .contentWrap {
   max-width:1024px;
   margin:0 auto;
@@ -149,10 +154,11 @@ div.settings a:hover + .settingsBox {
   border: 1px solid #d4d6ab;
   border-radius: 2px 2px;
 }
-.dispMessage {
+#messageList {
+  line-height:24px
 }
 .original {
-  margin-top:-18px;
+  margin-top:-24px;
   background-color:#DEFFF8;
   position:relative;
   z-index:2;
@@ -195,11 +201,18 @@ div.settings a:hover + .settingsBox {
 }
 
 #nickInput {
-  width:130px;  
   background-color:#ffffff;
   background: rgba(255,255,255,0.8);
+  border: 1px solid #d4d6ab;
   color:#111;
-  border:none;
+  border-radius: 1px 1px;
+  padding-left:5px;
+}
+#colorInput {
+  background-color:#ffffff;
+  background: rgba(255,255,255,0.8);
+  border: 1px solid #d4d6ab;
+  color:#111;
   border-radius: 1px 1px;
   padding-left:5px;
 }
@@ -211,9 +224,31 @@ div.settings a:hover + .settingsBox {
   border:1px solid #d4d6ab;
   margin-top:5px;
   padding:5px;
+  text-align:center;
   border-radius:2px 2px;
 }
+#innerVote{
+  visibility:hidden;
+}
 
+.term {
+  padding: 6px 0px;
+}
+.voteArrows {
+  margin-top:10px;
+}
+.voteArrows a {
+  text-decoration:none;
+  font-size:19px;
+  font-weight:bold;
+  padding:0px 0px;
+}
+#upvote {
+  color:orange;
+}
+#downvote {
+  color:skyblue;
+}
 .grey {
   color:#777 !important;
 }
@@ -223,4 +258,7 @@ button {
 }
 .name {
   font-weight:bold;
+}
+.visible {
+  visibility:visible !important;
 }

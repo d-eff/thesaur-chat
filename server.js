@@ -33,7 +33,7 @@ io.sockets.on('connection', function(socket){
 
   //set initial nickname and announce entrance
   socket.set('nickname', tempNick, function(){
-
+    
     //generate a color
     var color = '#'+Math.floor(Math.random()*16777215).toString(16);
 
@@ -124,6 +124,10 @@ io.sockets.on('connection', function(socket){
       
       });
     }
+  });
+
+  socket.on('vote', function(data){
+    console.log("vote received: " + data.syn + " for " + data.orig + " : " + data.dir); 
   });
 
   //announce disconnects

@@ -1,19 +1,36 @@
 var socket = io.connect();
 var messages = [],
     messageIndex = 0;
-var autoscrollEnable = true;
 
 var msgDisplay = document.getElementById('messageDisplay'),
     msgList = document.getElementById('messageList'),
     msgInput = document.getElementById('messageInput'),
     sendButton = document.getElementById('messageSend'),
     nickInput = document.getElementById('nickInput'),
-    nickChange = document.getElementById('nickChange');
+    nickChange = document.getElementById('nickChange'),
+    upvote = document.getElementById('upvote'),
+    downvote = document.getElementById('downvote');
+
+var innerVoteBoxThing = document.getElementById('innerVote'),
+    arrowBox = document.getElementsByClassName('voteArrows')[0];
+
+var voter = {
+  originalTerm : null,
+  synonym: null,
+  vote: function(ev, direction){
+    if(ev){
+      ev.preventDefault();
+    }
+    innerVoteBoxThing.classList.toggle('visible');
+    socket.emit('vote', {orig: this.originalTerm, syn: this.synonym, dir: direction});
+  }
+}
 
 //*******EVENT LISTENERS
 
 //click the send button or press 'enter' to send a message
 sendButton.addEventListener('click', sendMessage);
+
 document.addEventListener('keydown', function(ev){
   //enter
   if(ev.keyCode === 13){
@@ -33,42 +50,15 @@ document.addEventListener('keydown', function(ev){
 });
 
 //event listener for name change button
-nickChange.addEventListener('click', function(ev){
-  changeNick();  
-});
+nickChange.addEventListener('click', changeNick);
 
-//is it cheaper/better to use a flag like this?
-//or should I just use document.activeElement === msgDisplay?
-//atm I'm only checking for this case
-msgDisplay.addEventListener('focus', function(ev){
-  autoscrollEnable = false;
-});
-msgDisplay.addEventListener('blur', function(ev){
-  autoscrollEnable = true;
-});
+upvote.addEventListener('click', function(ev){
+  voter.vote(ev, 'up');
+})
 
-//hide the default value on the input boxes
-nickInput.addEventListener('focus', function(ev){
-  nickInput.value = '';
-  nickInput.classList.toggle('grey');
-});
-nickInput.addEventListener('blur', function(ev){
-  //so... when you click the 'change' button, focus occurs on the button
-  //before click does. so blur fires here, and then it tries to set the nickname
-  //there's got to be a better way to handle this.
-  setTimeout(function(){nickInput.value = "change your handle"}, 100);
-  nickInput.classList.toggle('grey');
-});
-msgInput.addEventListener('focus', function(ev){
-  msgInput.value = '';
-  msgInput.classList.toggle('grey');
-});
-msgInput.addEventListener('blur', function(ev){
-  setTimeout(function(){msgInput.value = "press enter to send."}, 100);
-  msgInput.classList.toggle('grey');
-});
-
-
+downvote.addEventListener('click', function(ev){
+  voter.vote(ev, 'down');
+})
 //*********HELPER FUNCTIONS
 
 //send a message, unless the field is empty
@@ -96,7 +86,7 @@ function receiveMessage(data){
   if(data.original){ 
     original = document.createElement('li');
     original.classList.add('original');
-    original.innerHTML = "<span style=\"color:" + data.color + "\">" + data.nickname + ":</span>&nbsp;";
+    original.innerHTML = "<span class=\"name\" style=\"color:" + data.color + "\">" + data.nickname + ":</span>&nbsp;";
     var dterms = data.message.split(' ');
     var oterms = data.original.split(' ');
     for(var x = 0; x < oterms.length; ++x){
@@ -105,14 +95,25 @@ function receiveMessage(data){
     }
     data.original; 
     msgList.appendChild(original);
+
     original.addEventListener('click', function(e){
-      var voteBox = document.getElementsByClassName('voteBox')[0];
-      voteBox.innerHTML = "<h3>" + e.target.dataset.orig + "</h3>" + "<p>" + e.target.innerHTML + "</p><p>UPVOTE</p><p>DOWNVOTE</p>";
-      console.log(e.target + " node: " + e.target.innerHTML + " dat: " + e.target.dataset.orig); 
+  
+      e.preventDefault();
+      if(e.target.nodeName === "A"){
+      var synTerm = document.getElementById('syn'),
+          origTerm = document.getElementById('orig');
+
+      voter.originalTerm = origTerm.innerHTML = e.target.dataset.orig;
+      voter.synonym = synTerm.innerHTML = e.target.innerHTML;
+
+      if(!innerVoteBoxThing.classList.contains('visible')){
+        innerVoteBoxThing.classList.add('visible');
+      }
+      }
     });
   }
   //autoscroll the chat box to the bottom
-  if(autoscrollEnable){
+  if(document.activeElement !== msgDisplay){
     msgDisplay.scrollTop = msgDisplay.scrollHeight;
   }
 }

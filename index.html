@@ -25,10 +25,10 @@
           <a href="#"><h1>!</h1></a>
           <div class="settingsBox"><h3>Settings</h3>  
            <h4>Nickname</h4>
-        <input id="nickInput"  type="text" value="change your handle" class="grey">
+        <input id="nickInput"  type="text" placeholder="Preferred appellation?">
         <button id="nickChange">Change</button>
         <h4>Display Color</h4>
-        <input id="colorInput" text="text" value="enter a hex color" class="grey">
+        <input id="colorInput" text="text" placeholder="enter a hex color">
         <button id="colorChange">Change</button>
           </div>
         </div>
@@ -43,11 +43,16 @@
         <div class="userList"><ul></ul></div>
         <h3 class="smHeadline">vote.</h3>
         <div class="voteBox">
-        VOTE!
+          <div id="innerVote">
+          <h4 class="term" id="syn"></h4>
+          as a synonym for
+          <h4 class="term" id="orig"></h4>
+          <div class="voteArrows"><a id="upvote" href="#">SUBLIME</a> or <a id="downvote" href="#">RUBBISH</a></div>
         </div>
       </div>
+      </div>
       <div class="send">
-        <input id="messageInput" type="text" value="press enter to send." class="grey">
+        <input id="messageInput" type="text" placeholder="Share your missive. We'll give it some class.">
         <button id="messageSend">SEND</button>
       </div>
 
