@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Jabberwock</title>
+    <script src="/socket.io/socket.io.js"></script>
+    <link href="http://fonts.googleapis.com/css?family=Crimson+Text" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+  </head>
+  <body>
+    <div class="contentWrap">
+      <div class="headline">
+        <h1>thesaurus.</h1>
+        <div class="settings">
+          <a href="#"><h1>?</h1></a>
+          <div class="settingsBox">
+            <h3>What?</h3>
+            <p>We're forcibly stepping everyone's diction game up. Get on our level.</p>
+            <h3>Huh?</h3>
+            <p>This monosyllabic thing you've got going on - we like it. This chat room passes all your messages through the thesaurus api from thesaurus.altervista.org. Hilarity (hopefully) ensues.</p>
+            <h3>Who?</h3>
+            <p>Another glorious and terrifying <strong>Fictional Corp</strong> product.</p>
+          </div>
+        </div>
+        <div class="settings">
+          <a href="#"><h1>!</h1></a>
+          <div class="settingsBox"><h3>Settings</h3>  
+           <h4>Nickname</h4>
+        <input id="nickInput"  type="text" placeholder="Preferred appellation?">
+        <button id="nickChange">Change</button>
+        <h4>Display Color</h4>
+        <input id="colorInput" text="text" placeholder="enter a hex color">
+        <button id="colorChange">Change</button>
+          </div>
+        </div>
+      </div>
+      <div id="messageDisplay" tabindex="0">
+        <ul id="messageList"></ul>
+      </div>
+
+
+      <div class="rcol">
+        <h3 class="smHeadline">users.</h3>
+        <div class="userList"><ul></ul></div>
+        <h3 class="smHeadline">vote.</h3>
+        <div class="voteBox">
+          <div id="innerVote">
+          <h4 class="term" id="syn"></h4>
+          as a synonym for
+          <h4 class="term" id="orig"></h4>
+          <div class="voteArrows"><a id="upvote" href="#">SUBLIME</a> or <a id="downvote" href="#">RUBBISH</a></div>
+        </div>
+      </div>
+      </div>
+      <div class="send">
+        <input id="messageInput" type="text" placeholder="Share your missive. We'll give it some class.">
+        <button id="messageSend">SEND</button>
+      </div>
+
+    </div>
+
+        <script src="chatFunc.js"></script>
+  </body>
+</html>

@@ -15,9 +15,9 @@ server.listen(8080);
 
 app.use(express.static(__dirname + '/public'));
 
-app.get('/', function(req, res){
+/*app.get('/', function(req, res){
   res.sendfile('index.html');
-});
+});*/
 
 io.sockets.on('connection', function(socket){
   //generate a new (temp?) nickname on first connect
