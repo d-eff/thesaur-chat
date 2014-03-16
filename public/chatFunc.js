@@ -1,3 +1,4 @@
+(function(){
 var socket = io.connect();
 var messages = [],
     messageIndex = 0;
@@ -188,6 +189,6 @@ socket.on('emote', function(data){
   msgList.appendChild(emote);
 })
 
-
+})();
 
 

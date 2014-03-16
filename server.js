@@ -81,6 +81,7 @@ io.sockets.on('connection', function(socket){
   //we got a message!
   socket.on('messageSend', function(data){
     //first word start with slash? we've got a server command
+    data.message = sanitizeMessage(data.message);
     if(data.message.match(/^\//)){ 
       var cmd = data.message.split(' ')[0],
           cmdLength = cmd.length;
@@ -142,3 +143,12 @@ io.sockets.on('connection', function(socket){
   })
 });
 
+function sanitizeMessage(message){
+  return ('' + message).replace(/&/g, '&amp;').
+                        replace(/</g, '&lt;').
+                        replace(/>/g, '&gt;').
+                        replace(/"/g, '&quot;').
+                        replace(/'/g, '&#x27;').
+                        replace(/\//g, '&#x2F;');
+}
+            
