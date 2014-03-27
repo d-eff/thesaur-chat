@@ -91,7 +91,7 @@ function receiveMessage(data){
     var dterms = data.message.split(' ');
     var oterms = data.original.split(' ');
     for(var x = 0; x < oterms.length; ++x){
-      var l = "<a href=\"#\" class=\"word\" data-orig=\"" + dterms[x]  + "\">" + oterms[x] + "</a>&nbsp;"
+      var l = "<a href=\"#\" class=\"word\" data-trans=\"" + dterms[x]  + "\">" + oterms[x] + "</a>&nbsp;"
       original.innerHTML += l;
     }
     data.original; 
@@ -104,8 +104,8 @@ function receiveMessage(data){
       var synTerm = document.getElementById('syn'),
           origTerm = document.getElementById('orig');
 
-      voter.originalTerm = origTerm.innerHTML = e.target.dataset.orig;
-      voter.synonym = synTerm.innerHTML = e.target.innerHTML;
+      voter.originalTerm = origTerm.innerHTML = e.target.innerHTML;
+      voter.synonym = synTerm.innerHTML = e.target.dataset.trans;
 
       if(!innerVoteBoxThing.classList.contains('visible')){
         innerVoteBoxThing.classList.add('visible');
