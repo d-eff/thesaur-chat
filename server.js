@@ -2,7 +2,7 @@ var express = require('express'),
     app = express(),
     http = require('http'),
     server = http.createServer(app),
-    io = require('socket.io').listen(server),
+    io = require('socket.io').listen(server, {log:false}),
     fancy = require('./thesaurize');
 
 var names = ["John", "Mary", "William", "Dorothy", "Robert", "Helen", "James", "Margaret", "Charles", "Ruth", "George", "Mildred", "Joseph", "Virginia", "Edward", "Elizabeth", "Frank", "Frances", "Richard", "Anna"],
@@ -128,7 +128,7 @@ io.sockets.on('connection', function(socket){
   });
 
   socket.on('vote', function(data){
-    console.log("vote received: " + data.syn + " for " + data.orig + " : " + data.dir); 
+    //console.log("vote received: " + data.syn + " for " + data.orig + " : " + data.dir); 
   });
 
   //announce disconnects

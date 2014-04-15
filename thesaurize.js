@@ -54,7 +54,7 @@ function splitWordList(word, data){
     //push our new word to the DB so we don't have to hit the API for it again
     collection.insert(newDBEntry, function(e, docs){
       if(e){
-        console.log("error in insert " + e);
+        //console.log("error in insert " + e);
       }
     });
 
@@ -77,7 +77,7 @@ function getWord(word, callback){
   collection.find({"term": word}, {}, 
   function(e, docs){
     if(e){
-      console.log("DB error " + e)
+      //console.log("DB error " + e)
     } else {
       //we got a hit in the db
       if(docs.length > 0){
@@ -105,7 +105,7 @@ function getWord(word, callback){
             callback(null, result);
           } else {
             //nothing found, so we'll just use the word itself
-            console.log("API call error " + error);
+            //console.log("API call error " + error);
             result = word;
             callback(null, result);
           }
@@ -124,7 +124,7 @@ xpo.fancify = function(input, callback){
   //async process each word
   async.map(input, getWord, function(err, results){
     if(err){
-      console.log("problem");
+      //console.log("problem");
     } else {
       //we've got all the words, put them back together
       callback(results.join(' '));
